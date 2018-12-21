@@ -1,1 +1,1 @@
-Some parts for prototype
+Some code for prototype

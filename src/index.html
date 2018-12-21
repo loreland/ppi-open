@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>Loreland</title>
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <script type="text/javascript" src="assets/js/env.min.js"></script>
+  </head>
+  <body>
+
+    <div id="app">
+      <router-view :key="$route.fullPath"></router-view>
+    </div>
+
+<!-- Home -->
+    <script type="text/x-template" id="content-home">
+      <div class="container">
+        <transition name="fade" mode="out-in" appear>
+          <component :is="{template: '#content-home-layout-'+$store.getters.layout}"></component>
+        </transition>
+      </div>
+    </script>
+
+    <script type="text/x-template" id="content-home-layout-1">
+      <div class="layout-1">
+        <div class="wrapper wrapper-home">
+          <div id="language">
+            <ul>
+              <li class="active"><a href="#" class="ru"></a></li>
+              <li><a href="#" class="en"></a></li>
+              <li><a href="#" class="ch"></a></li>
+            </ul>
+          </div>
+          <div id="logo">
+            <img src="assets/img/layout-1/logo.png" alt="">
+          </div>
+          <div id="header">
+            <h1>Совместная<br>удалённая работа<br><b>по-новому</b></h1>
+          </div>
+          <div class="btn-group">
+            <router-link to="/idea" class="btn">Регистрация</router-link>
+            <router-link to="/idea" class="btn">Вход</router-link>
+            <router-link to="/idea">Войти гостем</router-link>
+          </div>
+        </div>
+        <aside class="home">
+          <h5>Стиль приложения:</h5>
+          <ul>
+            <li v-for="l in 3":class="{active:$store.getters.layout==l}"><a href="#" @click.prevent="$store.commit('changeLayout',{storage:!0,value:l})"><img :src="'assets/img/layout-'+l+'.png'" alt=""></a></li>
+          </ul>
+        </aside>
+      </div>
+    </script>
+
+    <script type="text/x-template" id="content-home-layout-2">
+      <div class="layout-2">
+        <div class="wrapper wrapper-home">
+          <div id="language">
+            <ul>
+              <li class="active"><a href="#" class="ru"></a></li>
+              <li><a href="#" class="en"></a></li>
+              <li><a href="#" class="ch"></a></li>
+            </ul>
+          </div>
+          <div id="logo">
+            <img src="assets/img/layout-2/logo.png" alt="">
+          </div>
+          <div id="header">
+            <img src="assets/img/layout-2/girl.png" alt="">
+            <p>Привет! Рада видеть, но впредь не заставляй меня ждать!</p>
+          </div>
+          <div class="btn-group">
+            <router-link to="/idea" class="btn">Регистрация</router-link>
+            <router-link to="/idea" class="btn">Вход</router-link>
+            <router-link to="/idea">Войти гостем</router-link>
+          </div>
+        </div>
+        <aside class="home">
+          <h5>Стиль приложения:</h5>
+          <ul>
+            <li v-for="l in 3":class="{active:$store.getters.layout==l}"><a href="#" @click.prevent="$store.commit('changeLayout',{storage:!0,value:l})"><img :src="'assets/img/layout-'+l+'.png'" alt=""></a></li>
+          </ul>
+        </aside>
+      </div>
+    </script>
+
+    <script type="text/x-template" id="content-home-layout-3">
+      <div class="layout-3">
+        <div class="wrapper wrapper-home">
+        </div>
+        <aside class="home">
+          <h5>Стиль приложения:</h5>
+          <ul>
+            <li v-for="l in 3":class="{active:$store.getters.layout==l}"><a href="#" @click.prevent="$store.commit('changeLayout',{storage:!0,value:l})"><img :src="'assets/img/layout-'+l+'.png'" alt=""></a></li>
+          </ul>
+        </aside>
+      </div>
+    </script>
+<!-- /Home -->
+
+<!-- Idea -->
+    <script type="text/x-template" id="content-idea">
+      <div class="container">
+        <div :class="'layout-'+$store.getters.layout">
+          <div class="wrapper" style="padding-bottom:40px">
+            <div class="wrapper-idea">
+              <router-link to="/" class="link-back"><i class="icon-left-open-big"></i></router-link>
+              <div class="chapter"><img src="assets/img/layout-2/idea.png" alt=""></div>
+              <div class="editable">
+                <i :class="{'icon-pencil':!editable,'icon-floppy':editable}" data-action="edit" @click="edit"></i>
+                <h2>{{storage.h||'Раздел &laquo;Идея&raquo;'}}</h2>
+                <p>{{storage.p||'Искусство преобразует закон исключённого третьего. Апостериори, гравитационный парадокс абстрактен.'}}</p>
+                <br>
+                <p><a href="#" class="link-details">Подробнее</a></p>
+              </div>
+              <div class="pie-chart">
+                <div class="workarea">
+                  <div id="chartarea"></div>
+                </div>
+                <dl class="right">
+                  <dt><b>{{tokensAtDivvy*divvy/1000}}</b>тыс.</dt>
+                  <dd>Доля<br>в токенах</dd>
+                </dl>
+                <dl>
+                  <dt><b>{{divvy}}%</b></dt>
+                  <dd>Доля раздела<br>в проекте</dd>
+                </dl>
+                <div class="text-center">
+                  <h4>Изменить долю</h4>
+                  <div class="btn-group">
+                    <button type="button" class="btn" @click="incdec(1)">+1</button>
+                    <button type="button" class="btn" @click="incdec(-1)">-1</button>
+                  </div>
+                  <div class="btn-group">
+                    <button type="button" class="btn" @click="incdec(5)">+5</button>
+                    <button type="button" class="btn" @click="incdec(-5)">-5</button>
+                  </div>
+                  <div class="btn-group">
+                    <button type="button" class="btn" @click="incdec(10)">+10</button>
+                    <button type="button" class="btn" @click="incdec(-10)">-10</button>
+                  </div>
+                </div>
+                <transition name="fade">
+                  <a href="#" class="help" v-show="showHelp" @click.prevent="showHelpMessage=!showHelpMessage">
+                    <img src="assets/img/layout-2/help.png" alt=""><br>
+                    <span>Помочь?</span>
+                    <em v-show="showHelpMessage"><i class="arrow-right"></i>Текст текст текст текст текст текст текст текст.</em>
+                  </a>
+                </transition>
+              </div>
+              <button type="button" class="btn btn-list" @click="submit">Список задач ({{taskList.length}})</button>
+              <div class="task-list" v-show="showTaskList">
+                <ul>
+                  <li v-for="item in taskList">{{item.title}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+<!-- /Idea -->
+
+    <script type="text/javascript" src="app.js"></script>
+  </body>
+</html>
